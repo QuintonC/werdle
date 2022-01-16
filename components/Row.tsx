@@ -1,18 +1,47 @@
 import { StyleSheet, Text, View } from "react-native";
+import { GuessList, Matches } from "../types";
 
 interface Props {
   index: number;
-  row: number;
+  guessList: GuessList;
   word: string;
   wordLength: number;
+  matches: Matches;
 }
 
-export default function Row({ index, row, word, wordLength }: Props) {
+export default function Row({
+  index,
+  guessList,
+  word,
+  wordLength,
+  matches,
+}: Props) {
+  const getText = (i: number) => {
+    if (guessList.length === index) {
+      return word[i];
+    } else {
+      return guessList[index] ? guessList[index][i] : "";
+    }
+  };
+
+  const getColor = (i: number) => {
+    if (guessList[index]) {
+      const key = guessList[index][i];
+      const { match, index: matchIdx } = matches[key];
+      if (match && matchIdx === i) return "green";
+      if (match && matchIdx === null) return "yellow";
+      return "darkgray";
+    }
+  };
+
   return (
     <View style={styles.row}>
       {Array.from(Array(wordLength), (_, i) => (
-        <View key={i} style={styles.letter}>
-          <Text style={styles.text}>{row === index ? word[i] : ""}</Text>
+        <View
+          key={i}
+          style={{ ...styles.letter, backgroundColor: getColor(i) }}
+        >
+          <Text style={styles.text}>{getText(i)}</Text>
         </View>
       ))}
     </View>

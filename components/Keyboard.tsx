@@ -1,12 +1,21 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Matches } from "../types";
 
 interface Props {
   word: string;
   setWord: (key: string) => void;
   wordLength: number;
+  handleSubmit: () => void;
+  matches: Matches;
 }
 
-export default function Keyboard({ word, setWord, wordLength }: Props) {
+export default function Keyboard({
+  word,
+  setWord,
+  wordLength,
+  handleSubmit,
+  matches,
+}: Props) {
   const topKeys = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const middleKeys = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const bottomKeys = ["Z", "X", "C", "V", "B", "N", "M"];
@@ -14,7 +23,7 @@ export default function Keyboard({ word, setWord, wordLength }: Props) {
   const handlePress = (key: string) => {
     if (key === "enter") {
       if (word.length === wordLength) {
-        setWord("");
+        handleSubmit();
       }
       return;
     }
@@ -29,12 +38,24 @@ export default function Keyboard({ word, setWord, wordLength }: Props) {
     }
   };
 
+  const getColor = (key: string) => {
+    if (matches && matches[key]) {
+      const { match, index } = matches[key];
+      if (match && index !== null) return "green";
+      if (match && index === null) return "yellow";
+      return "darkgray";
+    }
+  };
+
   return (
     <>
       <View style={styles.row}>
         {topKeys.map((key, i) => (
           <TouchableOpacity
-            style={styles.key}
+            style={{
+              ...styles.key,
+              backgroundColor: getColor(key),
+            }}
             key={i}
             onPress={() => handlePress(key)}
           >
@@ -46,7 +67,10 @@ export default function Keyboard({ word, setWord, wordLength }: Props) {
         {middleKeys.map((key, i) => (
           <TouchableOpacity
             onPress={() => handlePress(key)}
-            style={styles.key}
+            style={{
+              ...styles.key,
+              backgroundColor: getColor(key),
+            }}
             key={i}
           >
             <Text style={styles.keyText}>{key}</Text>
@@ -63,7 +87,10 @@ export default function Keyboard({ word, setWord, wordLength }: Props) {
         {bottomKeys.map((key, i) => (
           <TouchableOpacity
             onPress={() => handlePress(key)}
-            style={styles.key}
+            style={{
+              ...styles.key,
+              backgroundColor: getColor(key),
+            }}
             key={i}
           >
             <Text style={styles.keyText}>{key}</Text>
