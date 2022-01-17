@@ -19,7 +19,6 @@ import {
   darkGray,
   gray,
   green,
-  lightGray,
   yellow,
 } from 'constants/colors';
 

@@ -1,6 +1,5 @@
 // Packages
-import { useEffect, useRef } from 'react';
-import { Animated, useColorScheme, Text, View } from 'react-native';
+import { useColorScheme, Text, View } from 'react-native';
 
 // Style
 import style from './style';
@@ -26,13 +25,7 @@ interface Props {
   gameOver?: boolean; // TODO  -- this shouldn't be optional.
 }
 
-export default function Row({
-  index,
-  guessList,
-  word,
-  wordLength,
-  gameOver = false,
-}: Props) {
+export default function Row({ index, guessList, word, wordLength }: Props) {
   const colorScheme = useColorScheme(),
     letterBorder = { borderColor: colorScheme === 'dark' ? darkGray : gray },
     matchBg = {
